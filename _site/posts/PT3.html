@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="유성준">
+<meta name="dcterms.date" content="2024-02-07">
 
-<title>PyTorch_intro</title>
+<title>PyTorch_intro - 파이토치 딥러닝 마스터 3장</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +102,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">PyTorch_intro</span>
     </a>
   </div>
@@ -155,7 +131,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -178,92 +154,162 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">PyTorch_intro</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">파이토치 딥러닝 마스터 3장</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Deep Learning</div>
+                <div class="quarto-category">Python</div>
+                <div class="quarto-category">PyTorch</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>유성준 </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 7, 2024</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Deep Learning">Deep Learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="PyTorch">PyTorch <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Python">Python <span class="quarto-category-count">(3)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-<th>
-Date
-</th>
-<th>
-Title
-</th>
-<th>
-Author
-</th>
-</tr>
-</thead>
-<tbody class="list">
-<tr data-index="0" data-categories="Deep Learning,Python,PyTorch" data-listing-date-sort="1707264000000" data-listing-file-modified-sort="1707366801374" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="56" data-listing-title-sort="파이토치 딥러닝 마스터 2장" data-listing-filename-sort="PT2.ipynb">
-<td>
-<span class="listing-date">Feb 7, 2024</span>
-</td>
-<td>
-<a href="./posts/PT2.html" class="title listing-title">파이토치 딥러닝 마스터 2장</a>
-</td>
-<td>
-<span class="listing-author">유성준 </span>
-</td>
-</tr>
-<tr data-index="1" data-categories="Deep Learning,Python,PyTorch" data-listing-date-sort="1707264000000" data-listing-file-modified-sort="1707366802822" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="331" data-listing-title-sort="파이토치 딥러닝 마스터 3장" data-listing-filename-sort="PT3.ipynb">
-<td>
-<span class="listing-date">Feb 7, 2024</span>
-</td>
-<td>
-<a href="./posts/PT3.html" class="title listing-title">파이토치 딥러닝 마스터 3장</a>
-</td>
-<td>
-<span class="listing-author">유성준 </span>
-</td>
-</tr>
-<tr data-index="2" data-categories="Deep Learning,Python,PyTorch" data-listing-date-sort="1707177600000" data-listing-file-modified-sort="1707366799846" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="1" data-listing-title-sort="파이토치 딥러닝 마스터 1장" data-listing-filename-sort="PT1.ipynb">
-<td>
-<span class="listing-date">Feb 6, 2024</span>
-</td>
-<td>
-<a href="./posts/PT1.html" class="title listing-title">파이토치 딥러닝 마스터 1장</a>
-</td>
-<td>
-<span class="listing-author">딥러닝과 파이토치 라이브러리 소개</span>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="listing-no-matching d-none">
-No matching items
+<section id="장-텐서-구조체-이해하기" class="level1">
+<h1>3장 텐서 구조체 이해하기</h1>
+<ul>
+<li>파이토치 기본 자료구조인 텐서를 이해한다.</li>
+<li>텐서를 인덱스로 접근해서 연산한다</li>
+<li>다차원 배열 넘파이와 연계해서 다</li>
+<li>기 성능 개선을 위해 GPU로 연산 처리하기</li>
+</ul>
+<blockquote class="blockquote">
+<p>딥러닝 프로세스는 입력을 부동소수점 수로 변환하는 것부터 시작한다. 3장에서는 응용을 들어가기 전에 텐서 를 사용하여 파이토치가 부동소수점 수를 어떻게 다루는지를 알아보자</p>
+</blockquote>
+<p><code>-</code> 부동 소수점 방식이란?</p>
+<p>실수는 보통 정수부와 소수부로 나누지만, 가수부와 지수부로 나누어 표현할 수 있다. 부동 소수점 방식은 이렇게 하나의 실수를 가수부와 지수부로 나누어 표현하는 방식이다. 앞서 살펴본 고정 소수점 방식은 제한된 자릿수로 인해 표현할 수 있는 범위가 매우 작다. 하지만 부동 소수점 방식은 다음 수식을 이용하여 매우 큰 실수까지도 표현할 수 있게 된다.</p>
+<section id="부동소수점" class="level2">
+<h2 class="anchored" data-anchor-id="부동소수점">부동소수점</h2>
+<ul>
+<li>심층 신경망(deep neural network)은 보통 여러 단계를 거쳐 데이터 변환을 학습한다.</li>
+<li>중간 단계는 입력값의 특징을 잡아내는 부동소수점 수의 모음인 동시에 신경망에서 입력이 최종적으로 출력으로 표현되는 방법을 기술하기 위한 수단이다.</li>
+<li>즉, 중간 표현값은 입력과 이전 층의 뉴런이 가진 가중치를 조합한 결과라는 점이다. 중간 단계의 개별 표현은 자신만의 방식으로 앞 단계에서 넘어온 입력을 반환한다.</li>
+</ul>
+</section>
+<section id="텐서-다차원-배열" class="level2">
+<h2 class="anchored" data-anchor-id="텐서-다차원-배열">텐서 : 다차원 배열</h2>
+<blockquote class="blockquote">
+<p>텐서는 일종의 배열이다. 즉, 한개나 여러개의 인덱스를 사용하여 개별적으로 값에 접근할 수 있는 형태의 숫자 모음을 저장하는 자료구조이다.</p>
+</blockquote>
+<p><code>-</code> 텐서의 핵심 - 텐서는 자료구조를 사용해 이미지와 시계열 데이터 혹은 문장들을 나타내는 것이 일반 파이썬 리스트보다 더 효율적이다.</p>
+<div id="02a957f7-7f9e-41c1-9278-1d44b886372c" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div></main> <!-- /main -->
+<div id="4b5b1cbd-70c2-4fdb-8729-fc6ebc85c9ba" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> torch.FloatTensor([<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>, <span class="fl">4.</span>, <span class="fl">5.</span>, <span class="fl">6.</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t) <span class="co">#  1차원 텐서인 벡터를 만든다.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.dim())  <span class="co"># rank. 즉, 차원</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.shape)  <span class="co"># shape</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.size()) <span class="co"># shape</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([0., 1., 2., 3., 4., 5., 6.])
+1
+torch.Size([7])
+torch.Size([7])</code></pre>
+</div>
+</div>
+<ul>
+<li>고급 인덱싱이 가능</li>
+</ul>
+<div id="8dece7ca-b26a-4804-b399-4b1cee049772" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[<span class="dv">0</span>], t[<span class="dv">1</span>], t[<span class="op">-</span><span class="dv">1</span>])  <span class="co"># 인덱스로 접근</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[<span class="dv">2</span>:<span class="dv">5</span>], t[<span class="dv">4</span>:<span class="op">-</span><span class="dv">1</span>])    <span class="co"># 슬라이싱</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[:<span class="dv">2</span>], t[<span class="dv">3</span>:])       <span class="co"># 슬라이싱</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(0.) tensor(1.) tensor(6.)
+tensor([2., 3., 4.]) tensor([4., 5.])
+tensor([0., 1.]) tensor([3., 4., 5., 6.])</code></pre>
+</div>
+</div>
+</section>
+<section id="텐서-api" class="level2">
+<h2 class="anchored" data-anchor-id="텐서-api">텐서 API</h2>
+<ul>
+<li>텐서끼리의 연산 대부분은 torch모듈 에 존재하며 대부분이 텐서 객체에 대해 메소드처럼 호출할 수 있다.</li>
+</ul>
+</section>
+<section id="텐서를-저장소-관점으로-생각해보기" class="level2">
+<h2 class="anchored" data-anchor-id="텐서를-저장소-관점으로-생각해보기">텐서를 저장소 관점으로 생각해보기</h2>
+<ul>
+<li>텐서의 내부 값은 실제로는 torch.Storage인스턴스 로 관리하며 연속적인 메모리 조각으로 할당된 상태이다.</li>
+<li>저장 공간은 숫자 데이터를 가진 1차원 배열이다.</li>
+</ul>
+<p><code>-</code> 여기서 중요한 점은 서로 다른 방식으로 구성된 텐서가 동일한 메모리 공간을 가리키고 있을 수 있으나, 동일한 데이터에 대해 다른 텐서 뷰를 만드는 작업은 Storage 객체가 관리하는 데이터 크기에 상관없이 빠르게 수행된다는 점이다.</p>
+<ul>
+<li>텐서의 저장공간 접근 확인을 위한 간단한 코드</li>
+</ul>
+<div id="ded99fda-23fe-4aae-931c-143bfe686955" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#텐서 저장 공간 접근</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> torch.tensor([[<span class="fl">4.0</span>, <span class="fl">1.0</span>], [<span class="fl">5.0</span>, <span class="fl">3.0</span>], [<span class="fl">2.0</span>, <span class="fl">1.0</span>]])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>points.storage()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code> 4.0
+ 1.0
+ 5.0
+ 3.0
+ 2.0
+ 1.0
+[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]</code></pre>
+</div>
+</div>
+<div id="9471879c-abb7-45d5-86b7-b4ea0ebd1030" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#텐서를 거치지 않고 저장 공간을 직접 접근하는 방법 </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>points_storage <span class="op">=</span> points.storage()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>points_storage[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>4.0</code></pre>
+</div>
+</div>
+</section>
+<section id="텐서-메타데이터-사이즈-오프셋-스트라이드" class="level2">
+<h2 class="anchored" data-anchor-id="텐서-메타데이터-사이즈-오프셋-스트라이드">텐서 메타데이터 : 사이즈, 오프셋, 스트라이드</h2>
+<blockquote class="blockquote">
+<p>저장 공간을 인덱스로 접근하기 위해 텐서는 저장 공간에 포함된 몇 가지 명확한 정보, 즉 사이즈(size), 오프셋(offset), 스트라이드(stride) 에 의존한다.</p>
+</blockquote>
+<ul>
+<li>사이즈(size) : 텐서의 각 차원 별로 들어가는 요소의 수를 표시한 튜플</li>
+<li>오프셋(offset) : 텐서의 첫 번째 요소를 가리키는 색인 값과 동일</li>
+<li>스트라이드(stride) : 각 차원에서 다음 요소를 가리키고 싶을 때 실제 저장 공간상에서 몇 개의 요소를 건너뛰어야하는지를 알려주는 요소</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
