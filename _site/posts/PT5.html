@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="유성준">
-<meta name="dcterms.date" content="2024-02-08">
+<meta name="dcterms.date" content="2024-02-13">
 
-<title>PyTorch_intro - 파이토치 딥러닝 마스터 3장</title>
+<title>PyTorch_intro - 파이토치 딥러닝 마스터 5장</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">파이토치 딥러닝 마스터 3장</h1>
+      <h1 class="title">파이토치 딥러닝 마스터 5장</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Deep Learning</div>
                 <div class="quarto-category">Python</div>
@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 8, 2024</p>
+        <p class="date">February 13, 2024</p>
       </div>
     </div>
     
@@ -196,239 +196,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="장-텐서-구조체-이해하기" class="level1">
-<h1>3장 텐서 구조체 이해하기</h1>
-<ul>
-<li>파이토치 기본 자료구조인 텐서를 이해한다.</li>
-<li>텐서를 인덱스로 접근해서 연산한다</li>
-<li>다차원 배열 넘파이와 연계해서 다</li>
-<li>기 성능 개선을 위해 GPU로 연산 처리하기</li>
-</ul>
-<blockquote class="blockquote">
-<p>딥러닝 프로세스는 입력을 부동소수점 수로 변환하는 것부터 시작한다. 3장에서는 응용을 들어가기 전에 텐서 를 사용하여 파이토치가 부동소수점 수를 어떻게 다루는지를 알아보자</p>
-</blockquote>
-<p><code>-</code> 부동 소수점 방식이란?</p>
-<p>실수는 보통 정수부와 소수부로 나누지만, 가수부와 지수부로 나누어 표현할 수 있다. 부동 소수점 방식은 이렇게 하나의 실수를 가수부와 지수부로 나누어 표현하는 방식이다. 앞서 살펴본 고정 소수점 방식은 제한된 자릿수로 인해 표현할 수 있는 범위가 매우 작다. 하지만 부동 소수점 방식은 다음 수식을 이용하여 매우 큰 실수까지도 표현할 수 있게 된다.</p>
-<section id="부동소수점" class="level2">
-<h2 class="anchored" data-anchor-id="부동소수점">부동소수점</h2>
-<ul>
-<li>심층 신경망(deep neural network)은 보통 여러 단계를 거쳐 데이터 변환을 학습한다.</li>
-<li>중간 단계는 입력값의 특징을 잡아내는 부동소수점 수의 모음인 동시에 신경망에서 입력이 최종적으로 출력으로 표현되는 방법을 기술하기 위한 수단이다.</li>
-<li>즉, 중간 표현값은 입력과 이전 층의 뉴런이 가진 가중치를 조합한 결과라는 점이다. 중간 단계의 개별 표현은 자신만의 방식으로 앞 단계에서 넘어온 입력을 반환한다.</li>
-</ul>
-</section>
-<section id="텐서-다차원-배열" class="level2">
-<h2 class="anchored" data-anchor-id="텐서-다차원-배열">텐서 : 다차원 배열</h2>
-<blockquote class="blockquote">
-<p>텐서는 일종의 배열이다. 즉, 한개나 여러개의 인덱스를 사용하여 개별적으로 값에 접근할 수 있는 형태의 숫자 모음을 저장하는 자료구조이다.</p>
-</blockquote>
-<p><code>-</code> 텐서의 핵심 - 텐서는 자료구조를 사용해 이미지와 시계열 데이터 혹은 문장들을 나타내는 것이 일반 파이썬 리스트보다 더 효율적이다.</p>
-<div id="02a957f7-7f9e-41c1-9278-1d44b886372c" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="파이토치로-문제-풀어보기" class="level2">
+<h2 class="anchored" data-anchor-id="파이토치로-문제-풀어보기">파이토치로 문제 풀어보기</h2>
+<div id="90a9e842-7b69-45c6-89e8-6ba5bcc08ffc" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>torch.set_printoptions(edgeitems<span class="op">=</span><span class="dv">2</span>, linewidth<span class="op">=</span><span class="dv">75</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="4b5b1cbd-70c2-4fdb-8729-fc6ebc85c9ba" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> torch.FloatTensor([<span class="fl">0.</span>, <span class="fl">1.</span>, <span class="fl">2.</span>, <span class="fl">3.</span>, <span class="fl">4.</span>, <span class="fl">5.</span>, <span class="fl">6.</span>])</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t) <span class="co">#  1차원 텐서인 벡터를 만든다.</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.dim())  <span class="co"># rank. 즉, 차원</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.shape)  <span class="co"># shape</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.size()) <span class="co"># shape</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>tensor([0., 1., 2., 3., 4., 5., 6.])
-1
-torch.Size([7])
-torch.Size([7])</code></pre>
+<div id="e9acc200-375c-4a61-9d16-68d14c0fff23" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> [<span class="fl">0.5</span>,  <span class="fl">14.0</span>, <span class="fl">15.0</span>, <span class="fl">28.0</span>, <span class="fl">11.0</span>,  <span class="fl">8.0</span>,  <span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>,  <span class="fl">6.0</span>, <span class="fl">13.0</span>, <span class="fl">21.0</span>]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> [<span class="fl">35.7</span>, <span class="fl">55.9</span>, <span class="fl">58.2</span>, <span class="fl">81.9</span>, <span class="fl">56.3</span>, <span class="fl">48.9</span>, <span class="fl">33.9</span>, <span class="fl">21.8</span>, <span class="fl">48.4</span>, <span class="fl">60.4</span>, <span class="fl">68.4</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> torch.tensor(t_c)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> torch.tensor(t_u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="0a2f68f1-7f01-40db-b6fc-700b366fda14" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(t_u, w, b):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">*</span> t_u <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="35edd8ac-05a7-4e5e-a0a1-ee0955c250e7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_fn(t_p, t_c):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    squared_diffs <span class="op">=</span> (t_p <span class="op">-</span> t_c)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> squared_diffs.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="4e8cb2d2-933f-4768-9433-abc8c02cb936" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> torch.ones(())</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> torch.zeros(())</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>t_p <span class="op">=</span> model(t_u, w, b)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>t_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>tensor([35.7000, 55.9000, 58.2000, 81.9000, 56.3000, 48.9000, 33.9000,
+        21.8000, 48.4000, 60.4000, 68.4000])</code></pre>
 </div>
 </div>
-<ul>
-<li>고급 인덱싱이 가능</li>
-</ul>
-<div id="8dece7ca-b26a-4804-b399-4b1cee049772" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[<span class="dv">0</span>], t[<span class="dv">1</span>], t[<span class="op">-</span><span class="dv">1</span>])  <span class="co"># 인덱스로 접근</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[<span class="dv">2</span>:<span class="dv">5</span>], t[<span class="dv">4</span>:<span class="op">-</span><span class="dv">1</span>])    <span class="co"># 슬라이싱</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t[:<span class="dv">2</span>], t[<span class="dv">3</span>:])       <span class="co"># 슬라이싱</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>tensor(0.) tensor(1.) tensor(6.)
-tensor([2., 3., 4.]) tensor([4., 5.])
-tensor([0., 1.]) tensor([3., 4., 5., 6.])</code></pre>
+<div id="6b06e03b-5c1e-4688-a462-5ef864328938" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss_fn(t_p, t_c)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>tensor(1763.8848)</code></pre>
 </div>
 </div>
 </section>
-<section id="텐서-api" class="level2">
-<h2 class="anchored" data-anchor-id="텐서-api">텐서 API</h2>
-<ul>
-<li>텐서끼리의 연산 대부분은 torch모듈 에 존재하며 대부분이 텐서 객체에 대해 메소드처럼 호출할 수 있다.</li>
-</ul>
-</section>
-<section id="텐서를-저장소-관점으로-생각해보기" class="level2">
-<h2 class="anchored" data-anchor-id="텐서를-저장소-관점으로-생각해보기">텐서를 저장소 관점으로 생각해보기</h2>
-<ul>
-<li>텐서의 내부 값은 실제로는 torch.Storage인스턴스 로 관리하며 연속적인 메모리 조각으로 할당된 상태이다.</li>
-<li>저장 공간은 숫자 데이터를 가진 1차원 배열이다.</li>
-</ul>
-<p><code>-</code> 여기서 중요한 점은 서로 다른 방식으로 구성된 텐서가 동일한 메모리 공간을 가리키고 있을 수 있으나, 동일한 데이터에 대해 다른 텐서 뷰를 만드는 작업은 Storage 객체가 관리하는 데이터 크기에 상관없이 빠르게 수행된다는 점이다.</p>
-<ul>
-<li>텐서의 저장공간 접근 확인을 위한 간단한 코드</li>
-</ul>
-<div id="ded99fda-23fe-4aae-931c-143bfe686955" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#텐서 저장 공간 접근</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> torch.tensor([[<span class="fl">4.0</span>, <span class="fl">1.0</span>], [<span class="fl">5.0</span>, <span class="fl">3.0</span>], [<span class="fl">2.0</span>, <span class="fl">1.0</span>]])</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>points.storage()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
-<pre><code> 4.0
- 1.0
- 5.0
- 3.0
- 2.0
- 1.0
-[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]</code></pre>
+<section id="경사하강" class="level2">
+<h2 class="anchored" data-anchor-id="경사하강">경사하강</h2>
+<div id="4ff6ac35-f5a3-4750-b9eb-657620aafac1" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>delta <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>loss_rate_of_change_w <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    (loss_fn(model(t_u, w <span class="op">+</span> delta, b), t_c) <span class="op">-</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>     loss_fn(model(t_u, w <span class="op">-</span> delta, b), t_c)) <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> delta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div id="a5e6173c-4589-4df5-9039-69f33007413b" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">1e-2</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> w <span class="op">-</span> learning_rate <span class="op">*</span> loss_rate_of_change_w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9471879c-abb7-45d5-86b7-b4ea0ebd1030" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#텐서를 거치지 않고 저장 공간을 직접 접근하는 방법 </span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>points_storage <span class="op">=</span> points.storage()</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>points_storage[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
-<pre><code>4.0</code></pre>
+<div id="4c182351-41a5-45d0-adc9-b3f205ef1ed8" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>loss_rate_of_change_b <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    (loss_fn(model(t_u, w, b <span class="op">+</span> delta), t_c) <span class="op">-</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>     loss_fn(model(t_u, w, b <span class="op">-</span> delta), t_c)) <span class="op">/</span> (<span class="fl">2.0</span> <span class="op">*</span> delta)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> b <span class="op">-</span> learning_rate <span class="op">*</span> loss_rate_of_change_b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</section>
-<section id="텐서-메타데이터-사이즈-오프셋-스트라이드" class="level2">
-<h2 class="anchored" data-anchor-id="텐서-메타데이터-사이즈-오프셋-스트라이드">텐서 메타데이터 : 사이즈, 오프셋, 스트라이드</h2>
-<blockquote class="blockquote">
-<p>저장 공간을 인덱스로 접근하기 위해 텐서는 저장 공간에 포함된 몇 가지 명확한 정보, 즉 사이즈(size), 오프셋(offset), 스트라이드(stride) 에 의존한다.</p>
-</blockquote>
-<ul>
-<li>사이즈(size) : 텐서의 각 차원 별로 들어가는 요소의 수를 표시한 튜플</li>
-<li>오프셋(offset) : 텐서의 첫 번째 요소를 가리키는 색인 값과 동일</li>
-<li>스트라이드(stride) : 각 차원에서 다음 요소를 가리키고 싶을 때 실제 저장 공간상에서 몇 개의 요소를 건너뛰어야하는지를 알려주는 요소</li>
-</ul>
-</section>
-<section id="텐서-전치하기" class="level2">
-<h2 class="anchored" data-anchor-id="텐서-전치하기">텐서 전치하기</h2>
-<div id="902f20cf-7917-4078-b7f6-fd0ef327a90a" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> torch.tensor([[<span class="fl">4.0</span>, <span class="fl">1.0</span>], [<span class="fl">5.0</span>, <span class="fl">3.0</span>], [<span class="fl">2.0</span>, <span class="fl">1.0</span>]])</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>points</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>tensor([[4., 1.],
-        [5., 3.],
-        [2., 1.]])</code></pre>
-</div>
-</div>
-<div id="e9cad838-355a-4dd5-b677-98a085288c5a" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>points.t()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="3899ebc5-f829-4540-89db-ab942e23ee53" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
-<pre><code>tensor([[4., 5., 2.],
-        [1., 3., 1.]])</code></pre>
-</div>
-</div>
-<div id="342a4f42-c587-4f11-b2d0-cd62c2c965a4" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>points.transpose(<span class="dv">0</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>tensor([[4., 5., 2.],
-        [1., 3., 1.]])</code></pre>
-</div>
-</div>
-<div id="2a6847db-e7be-4f65-a45d-e36b3a76bb32" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>torch.transpose(points,<span class="dv">0</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>tensor([[4., 5., 2.],
-        [1., 3., 1.]])</code></pre>
-</div>
-</div>
-<blockquote class="blockquote">
-<p>더 높은 차원에서의 전치</p>
-</blockquote>
-<div id="85e16f3c-897f-4ed2-9be4-c720e4ba8e4f" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 0과 2 의 차원이 바뀐다</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> torch.ones(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>tt <span class="op">=</span> s.transpose(<span class="dv">0</span>,<span class="dv">2</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>tt.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
-<pre><code>torch.Size([7, 4, 2])</code></pre>
-</div>
-</div>
-</section>
-<section id="인접한-텐서" class="level2">
-<h2 class="anchored" data-anchor-id="인접한-텐서">인접한 텐서</h2>
-<div id="829f35c1-8215-46eb-88c0-d1249a164d12" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> torch.tensor([[<span class="fl">4.0</span>, <span class="fl">1.0</span>], [<span class="fl">5.0</span>, <span class="fl">3.0</span>], [<span class="fl">2.0</span>, <span class="fl">1.0</span>]])</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>points_t <span class="op">=</span> points.t()</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>points.is_contiguous()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
-<pre><code>True</code></pre>
-</div>
-</div>
-<div id="3a12f24f-ca3c-4ce9-9394-4f3f183840f7" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>points_t.is_contiguous()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
-<pre><code>False</code></pre>
-</div>
-</div>
-<div id="5aaa7ef2-2946-4813-9d50-12bf1ac2565c" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>points</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
-<pre><code>tensor([[4., 1.],
-        [5., 3.],
-        [2., 1.]])</code></pre>
-</div>
-</div>
-<div id="71cb2243-238e-42ef-8b38-1b54f2045af2" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>points.storage()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<pre><code> 4.0
- 1.0
- 5.0
- 3.0
- 2.0
- 1.0
-[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]</code></pre>
-</div>
-</div>
-<div id="967c8acd-138c-4036-8019-f2c4f10d2a32" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>points_t</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
-<pre><code>tensor([[4., 5., 2.],
-        [1., 3., 1.]])</code></pre>
-</div>
-</div>
-<div id="1a49f588-fcee-4042-9cba-615026a5090f" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 인접하지 않은 텐서가 나오는 것을 볼 수 있다</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>points_t.storage()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
-<pre><code> 4.0
- 1.0
- 5.0
- 3.0
- 2.0
- 1.0
-[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]</code></pre>
-</div>
-</div>
-<div id="d48f8cea-b266-42d4-8038-3237c87a1b24" class="cell" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ptc <span class="op">=</span> points_t.contiguous()</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>ptc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
-<pre><code>tensor([[4., 5., 2.],
-        [1., 3., 1.]])</code></pre>
-</div>
-</div>
-<div id="b0448183-27d2-4010-b995-343ff0061511" class="cell" data-execution_count="35">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ptc.storage()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
-<pre><code> 4.0
- 5.0
- 2.0
- 1.0
- 3.0
- 1.0
-[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]</code></pre>
+<pre><code>tensor(46.)</code></pre>
 </div>
 </div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
