@@ -19,10 +19,3 @@ format:
   html:
     theme: cosmo
     css: styles.css
-
-styles:
-  - |
-    .output {
-      max-height: 200px;
-      overflow-y: auto;
-    }
