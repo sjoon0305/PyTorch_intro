@@ -70,41 +70,6 @@
     "text": "points = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]])\npoints_t = points.t()\npoints.is_contiguous()\n\nTrue\n\n\n\npoints_t.is_contiguous()\n\nFalse\n\n\n\npoints\n\ntensor([[4., 1.],\n        [5., 3.],\n        [2., 1.]])\n\n\n\npoints.storage()\n\n 4.0\n 1.0\n 5.0\n 3.0\n 2.0\n 1.0\n[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]\n\n\n\npoints_t\n\ntensor([[4., 5., 2.],\n        [1., 3., 1.]])\n\n\n\n# 인접하지 않은 텐서가 나오는 것을 볼 수 있다\npoints_t.storage()\n\n 4.0\n 1.0\n 5.0\n 3.0\n 2.0\n 1.0\n[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]\n\n\n\nptc = points_t.contiguous()\nptc\n\ntensor([[4., 5., 2.],\n        [1., 3., 1.]])\n\n\n\nptc.storage()\n\n 4.0\n 5.0\n 2.0\n 1.0\n 3.0\n 1.0\n[torch.storage.TypedStorage(dtype=torch.float32, device=cpu) of size 6]"
   },
   {
-    "objectID": "posts/13wk-2.html#a.-motive",
-    "href": "posts/13wk-2.html#a.-motive",
-    "title": "13wk-2: Pandas – apply, map, applymap",
-    "section": "A. Motive",
-    "text": "A. Motive\n- 아래와 같은 상황이 있었다. (05wk-2의 숙제)\n\ndf = pd.DataFrame({'A':[1,2,3,4]})\ndf\n\n\n\n\n\n\n\n\nA\n\n\n\n\n0\n1\n\n\n1\n2\n\n\n2\n3\n\n\n3\n4\n\n\n\n\n\n\n\n\ndf[['A']].apply(np.mean)\n\nA    2.5\ndtype: float64\n\n\n\ndf['A'].apply(np.mean)\n\n0    1.0\n1    2.0\n2    3.0\n3    4.0\nName: A, dtype: float64"
-  },
-  {
-    "objectID": "posts/13wk-2.html#b.-s.apply",
-    "href": "posts/13wk-2.html#b.-s.apply",
-    "title": "13wk-2: Pandas – apply, map, applymap",
-    "section": "B. s.apply()",
-    "text": "B. s.apply()\n- 가능한 형태는 아래와 같다.\n\n변환함수(스칼라입력,스칼라출력): 로그, 제곱\n변환함수(벡터입력,벡터출력): 표준화, 정렬\n집계함수(벡터입력,스칼라출력): 평균, 최대값\n\n쓸모있는건 1 뿐이다.\n# 예제1 – s.apply + 스칼라입력, 스칼라출력\n\ns = pd.Series([1,2,3])\ns\n\n0    1\n1    2\n2    3\ndtype: int64\n\n\n\ns.apply(lambda x: -x)\n\n0   -1\n1   -2\n2   -3\ndtype: int64\n\n\n이건 사실 아래의 동작으로 이해하면 된다.\n1 -&gt; -1 \n2 -&gt; -2\n3 -&gt; -3 \n코드로는 아래와 같은 느낌\n\n[(lambda x: -x)(i) for i in s]\n\n[-1, -2, -3]\n\n\n#\n# 예제2 – s.apply + 벡터입력/스칼라출력(집계함수) // 가능은한데 사실상 스칼라입력,스칼라출력으로 해석해야함\n\ns = pd.Series([1,2,3])\ns\n\n0    1\n1    2\n2    3\ndtype: int64\n\n\n\ns.apply(np.sum) # ??\n\n0    1\n1    2\n2    3\ndtype: int64\n\n\n\n에러는 안나지만 원하는 동작은 아님\n\n이것은 사실 아래의 동작으로 이해할 수 있다.\n1 -&gt; sum(1) = 1 \n2 -&gt; sum(2) = 2\n3 -&gt; sum(3) = 3\n코드로는 아래의 느낌\n\n[np.sum(i) for i in s]\n\n[1, 2, 3]\n\n\n#\n# 예제3 – s.apply + 벡터입력/벡터출력 // 가능은 한데 사실상 스칼라입력,스칼라출력 함수로 해석해야함\n\ns = pd.Series([1,2,3])\ns\n\n0    1\n1    2\n2    3\ndtype: int64\n\n\n\ns.apply(lambda x: x-np.mean(x))\n\n0    0.0\n1    0.0\n2    0.0\ndtype: float64\n\n\n\n에러는 안나지만 원하는 동작은 아님\n\n이것은 사실 아래의 동작으로 이해할 수 있다.\n1 -&gt; 1-mean(1) = 0 \n2 -&gt; 2-mean(2) = 0\n3 -&gt; 3-mean(3) = 0\n코드로는 아래의 느낌\n\n[i-np.mean(i) for i in s]\n\n[0.0, 0.0, 0.0]\n\n\n#"
-  },
-  {
-    "objectID": "posts/13wk-2.html#c.-df.apply",
-    "href": "posts/13wk-2.html#c.-df.apply",
-    "title": "13wk-2: Pandas – apply, map, applymap",
-    "section": "C. df.apply()",
-    "text": "C. df.apply()\n- 가능한 형태는 아래와 같다.\n\n변환함수(벡터입력,벡터출력): 표준화, 정렬\n집계함수(벡터입력,스칼라출력): 평균, 최대값\n\n쓸모있는건 1,2 모두이다.\n# 예제1 – df.apply + 스칼라입력, 스칼라출력 (불가능)\n\ndf = pd.DataFrame({'X':[0.1,0.2,0.3],'Y':[-0.1,-0.2,-0.3]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n0.1\n-0.1\n\n\n1\n0.2\n-0.2\n\n\n2\n0.3\n-0.3\n\n\n\n\n\n\n\n\ndf.apply(lambda x: 'pos' if x&gt;0 else 'neg')\n\nValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().\n\n\n# 예제2 – df.apply + 스칼라입력,스칼라출력? 벡터입력,벡터출력!!\n\ndf = pd.DataFrame({'X':[0.1,0.2,0.3],'Y':[-0.1,-0.2,-0.3]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n0.1\n-0.1\n\n\n1\n0.2\n-0.2\n\n\n2\n0.3\n-0.3\n\n\n\n\n\n\n\n\ndf.apply(lambda x: x**2) # 이건 스칼라입력, 스칼라출력 아니고 벡터입력 벡터출력으로 컴퓨터가 해석함\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n0.01\n0.01\n\n\n1\n0.04\n0.04\n\n\n2\n0.09\n0.09\n\n\n\n\n\n\n\n이것은 사실 아래의 동작으로 이해할 수 있다.\ndf['X'] -&gt; (df['X'])**2\ndf['Y'] -&gt; (df['Y'])**2\n코드로는 아래의 느낌이다.\n\n[(lambda x: x**2)(df[i]) for i in df]\n\n[0    0.01\n 1    0.04\n 2    0.09\n Name: X, dtype: float64,\n 0    0.01\n 1    0.04\n 2    0.09\n Name: Y, dtype: float64]\n\n\n#\n# 예제3 – df.apply + 벡터입력,스칼라출력(집계함수)\n\ndf = pd.DataFrame({'X':[0.1,0.2,0.3],'Y':[-0.1,-0.2,-0.3]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n0.1\n-0.1\n\n\n1\n0.2\n-0.2\n\n\n2\n0.3\n-0.3\n\n\n\n\n\n\n\n\ndf.apply(np.sum)\n\nX    0.6\nY   -0.6\ndtype: float64\n\n\n#\n# 예제4 – df.apply + 벡터입력,스칼라출력(집계함수)\n\ndf = pd.DataFrame({'X':[0.1,0.2,0.3],'Y':[-0.1,-0.2,-0.3]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n0.1\n-0.1\n\n\n1\n0.2\n-0.2\n\n\n2\n0.3\n-0.3\n\n\n\n\n\n\n\n\ndf.apply(np.sum,axis=1)\n\n0    0.0\n1    0.0\n2    0.0\ndtype: float64\n\n\n\ns.apply에서는 axis가 유효한 인자가 아니지만 df.apply에서는 axis가 유효한 입력이고 디폴트값은 0이다.\n\n#\n# 예제5 – df.apply + 벡터입력,벡터출력\n\ndf = pd.DataFrame({'X':[1,2,3],'Y':[4,5,6]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n1\n4\n\n\n1\n2\n5\n\n\n2\n3\n6\n\n\n\n\n\n\n\n\ndf.apply(lambda x: x-np.mean(x))\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n-1.0\n-1.0\n\n\n1\n0.0\n0.0\n\n\n2\n1.0\n1.0\n\n\n\n\n\n\n\n\ndf.apply(lambda x: x-np.mean(x),axis=1)\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n-1.5\n1.5\n\n\n1\n-1.5\n1.5\n\n\n2\n-1.5\n1.5\n\n\n\n\n\n\n\n#\n# 예제6 – df.apply + 벡터입력, 벡터출력\n\ndf = pd.DataFrame({'X':[ 3.285,  0.328, -1.261],'Y':[ 1.068,  0.145, -0.222]})\ndf\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n3.285\n1.068\n\n\n1\n0.328\n0.145\n\n\n2\n-1.261\n-0.222\n\n\n\n\n\n\n\n\ndf.apply(np.sort)\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n-1.261\n-0.222\n\n\n1\n0.328\n0.145\n\n\n2\n3.285\n1.068\n\n\n\n\n\n\n\n\ndf.apply(np.sort, axis=1)\n\n0      [1.068, 3.285]\n1      [0.145, 0.328]\n2    [-1.261, -0.222]\ndtype: object\n\n\n\ndf.apply(lambda x: x*0+np.sort(x), axis=1) # 그다지 안중요한 트릭..\n\n\n\n\n\n\n\n\nX\nY\n\n\n\n\n0\n1.068\n3.285\n\n\n1\n0.145\n0.328\n\n\n2\n-1.261\n-0.222\n\n\n\n\n\n\n\n#"
-  },
-  {
-    "objectID": "posts/13wk-2.html#a.-s.map",
-    "href": "posts/13wk-2.html#a.-s.map",
-    "title": "13wk-2: Pandas – apply, map, applymap",
-    "section": "A. s.map()",
-    "text": "A. s.map()\n- 가능한 형태는 아래와 같다.\n\n변환함수(스칼라입력,스칼라출력): 로그, 제곱\n변환함수(벡터입력,벡터출력): 표준화, 정렬\n집계함수(벡터입력,스칼라출력): 평균, 최대값\n딕셔너리\n\n쓸모있는건 1,4 이다. 특히 4는 특정상황에서 매우 쓸모있음\n# 예제1 – s.map + 스칼라입력,스칼라출력\n\ns = pd.Series(['A','B','B','B','A'])\ns\n\n0    A\n1    B\n2    B\n3    B\n4    A\ndtype: object\n\n\n\ns.map(lambda x: x.lower())\n\n0    a\n1    b\n2    b\n3    b\n4    a\ndtype: object\n\n\n#\n# 예제2 – s.map + 스칼라입력,스칼라출력\n\ns = pd.Series([1,3,4,2])\ns\n\n0    1\n1    3\n2    4\n3    2\ndtype: int64\n\n\n\ns.map(lambda x: x**2)\n\n0     1\n1     9\n2    16\n3     4\ndtype: int64\n\n\n#\n# 예제3 – s.map + 벡터입력,스칼라출력 // 가능은한데 사실 스칼라입력,스칼라출력으로 해석해야함\n\ns = pd.Series([1,3,4,2])\ns\n\n0    1\n1    3\n2    4\n3    2\ndtype: int64\n\n\n\ns.map(np.sum)\n\n0    1\n1    3\n2    4\n3    2\ndtype: int64\n\n\n#\n# 예제4 – s.map + 벡터입력,벡터출력 // 가능은한데 사실 스칼라입력,스칼라출력으로 해석해야함\n\ns = pd.Series([1,3,4,2])\ns\n\n0    1\n1    3\n2    4\n3    2\ndtype: int64\n\n\n\ns.map(lambda x: x-np.mean(x))\n\n0    0.0\n1    0.0\n2    0.0\n3    0.0\ndtype: float64\n\n\n#\n# 예제5 – s.map + 딕셔너리\n\ns = pd.Series(['A','B','B','B','A'])\ns\n\n0    A\n1    B\n2    B\n3    B\n4    A\ndtype: object\n\n\n\ns.map({'A':'A+','B':'B0'})\n\n0    A+\n1    B0\n2    B0\n3    B0\n4    A+\ndtype: object\n\n\n#"
-  },
-  {
-    "objectID": "posts/13wk-2.html#b.-df.map-df.applymap",
-    "href": "posts/13wk-2.html#b.-df.map-df.applymap",
-    "title": "13wk-2: Pandas – apply, map, applymap",
-    "section": "B. df.map() = df.applymap()",
-    "text": "B. df.map() = df.applymap()\n\n\n\n\n\n\n코랩실습자를 위한 주의사항1\n\n\n\n코랩에서 실습할경우\ndf.map()\n이 동작하지 않습니다. 대신 아래와 같이 applymap이 동작합니다.\ndf.applymap()\n이것은 코랩에서 기본으로 설치되어있는 pandas의 버전이 너무 낮아서 생기는 문제입니다. 따라서 코랩을 쓰시는 분들은 아래의 강의노트들을 df.applymap()으로 바꿔서 실습하시기 바랍니다.\n\n\n\n\n\n\n\n\n코랩실습자를 위한 주의사항2\n\n\n\n만약 코랩에서도 df.map()을 사용하시려면 pandas를 높은버전으로 새로 설치하고 사용하시면 됩니다. 즉\n1. 코랩커널재시작 (컴퓨터 다시 할당)\n2. `import pandas as pd` 를 하기 전에 `!pip install pandas -U`를 이용하여 판다스를 최신버전으로 재설치 \n3. 판다스를 임포트 하고 (`import pandas as pd`) 실습\n와 같이 하시면 됩니다.\n\n\n- 가능한 형태는 아래와 같다.\n\n변환함수(스칼라입력,스칼라출력): 로그, 제곱\n집계함수(벡터입력,스칼라출력)\n\n1만 쓸모있다. 여기에서 df.map(변환함수) 꼴은 사실 df.applymap(변환함수)와 가능이 같다.\n# 예제1 – df.map + 스칼라입력,스칼라출력\n\ndf = pd.DataFrame({'A':[2143,2143],'B':['-',3456]})\ndf\n\n\n\n\n\n\n\n\nA\nB\n\n\n\n\n0\n2143\n-\n\n\n1\n2143\n3456\n\n\n\n\n\n\n\n\ndf.map(lambda x: 0 if x == '-' else x)\n\n\n\n\n\n\n\n\nA\nB\n\n\n\n\n0\n2143\n0\n\n\n1\n2143\n3456\n\n\n\n\n\n\n\n#\n# 예제2 – df.map + 벡터입력,벡터출력 // 불가능해\n\ndf = pd.DataFrame({'A':np.random.randn(5), 'B':np.random.randn(5)+5})\ndf\n\n\n\n\n\n\n\n\nA\nB\n\n\n\n\n0\n-0.474722\n4.616944\n\n\n1\n-0.123587\n5.941885\n\n\n2\n1.011905\n2.960560\n\n\n3\n0.306291\n3.769737\n\n\n4\n-1.231884\n6.354306\n\n\n\n\n\n\n\n\ndf.map(np.sort) # 불가능..\n\nAxisError: axis -1 is out of bounds for array of dimension 0\n\n\n#\n# 예제3 – df.map + 벡터입력,스칼라출력(집계함수) // 가능하긴한데 사실 스칼라입력,스칼라출력으로 해석해야함\n\ndf = pd.DataFrame({'A':np.random.randn(5), 'B':np.random.randn(5)+5})\ndf\n\n\n\n\n\n\n\n\nA\nB\n\n\n\n\n0\n-0.331755\n4.738557\n\n\n1\n1.064457\n3.152778\n\n\n2\n1.096634\n2.535014\n\n\n3\n0.586018\n5.692224\n\n\n4\n-1.619656\n5.566970\n\n\n\n\n\n\n\n\ndf.map(np.mean) # 사실상 스칼라입력,스칼라출력으로 봐야함\n\n\n\n\n\n\n\n\nA\nB\n\n\n\n\n0\n-0.331755\n4.738557\n\n\n1\n1.064457\n3.152778\n\n\n2\n1.096634\n2.535014\n\n\n3\n0.586018\n5.692224\n\n\n4\n-1.619656\n5.566970\n\n\n\n\n\n\n\n#\n# 예제4 – df.map + 딕셔너리 // 불가능\n\ndf = pd.DataFrame({'guebin':[0,1,0,1,0,1],'hynn':[0,1,1,1,1,1]})\ndf\n\n\n\n\n\n\n\n\nguebin\nhynn\n\n\n\n\n0\n0\n0\n\n\n1\n1\n1\n\n\n2\n0\n1\n\n\n3\n1\n1\n\n\n4\n0\n1\n\n\n5\n1\n1\n\n\n\n\n\n\n\n\ndf.map({0:'fail',1:'pass'})\n\nTypeError: the first argument must be callable\n\n\n#"
-  },
-  {
     "objectID": "posts/PT2.html",
     "href": "posts/PT2.html",
     "title": "파이토치 딥러닝 마스터 2장",
@@ -179,13 +144,6 @@
     "href": "index.html",
     "title": "PyTorch_intro",
     "section": "",
-    "text": "Date\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nFeb 20, 2024\n\n\n파이토치 딥러닝 마스터 6장\n\n\n유성준 \n\n\n\n\nFeb 13, 2024\n\n\n파이토치 딥러닝 마스터 5장\n\n\n유성준 \n\n\n\n\nFeb 12, 2024\n\n\n파이토치 딥러닝 마스터 4장\n\n\n유성준 \n\n\n\n\nFeb 7, 2024\n\n\n파이토치 딥러닝 마스터 2장\n\n\n유성준 \n\n\n\n\nFeb 7, 2024\n\n\n파이토치 딥러닝 마스터 3장\n\n\n유성준 \n\n\n\n\nFeb 6, 2024\n\n\n파이토치 딥러닝 마스터 1장\n\n\n딥러닝과 파이토치 라이브러리 소개\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/PT6.html",
-    "href": "posts/PT6.html",
-    "title": "파이토치 딥러닝 마스터 6장",
-    "section": "",
-    "text": "for i in range(1, 100):\n    print(i)\n\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99"
+    "text": "Date\n\n\nTitle\n\n\nAuthor\n\n\n\n\n\n\nFeb 20, 2024\n\n\n파이토치 딥러닝 마스터 6장\n\n\n유성준 \n\n\n\n\nFeb 13, 2024\n\n\n파이토치 딥러닝 마스터 5장\n\n\n유성준 \n\n\n\n\nFeb 12, 2024\n\n\n파이토치 딥러닝 마스터 4장\n\n\n유성준 \n\n\n\n\nFeb 8, 2024\n\n\n파이토치 딥러닝 마스터 3장\n\n\n유성준 \n\n\n\n\nFeb 7, 2024\n\n\n파이토치 딥러닝 마스터 2장\n\n\n유성준 \n\n\n\n\nFeb 6, 2024\n\n\n파이토치 딥러닝 마스터 1장\n\n\n유성준 \n\n\n\n\n\nNo matching items"
   }
 ]
