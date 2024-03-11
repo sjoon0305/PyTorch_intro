@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.533">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,13 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -96,7 +90,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -106,43 +99,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
 <link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
+      <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">PyTorch_intro</span>
     </a>
@@ -154,29 +120,29 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="https://sjoon0305.github.io/sj_hub/"> 
-<span class="menu-text">Main_Blog</span></a>
+    <a class="nav-link" href="https://sjoon0305.github.io/sj_hub/" rel="" target="">
+ <span class="menu-text">Main_Blog</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/sjoon0305"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/sjoon0305" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
-<span class="menu-text"></span></a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
+          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -224,7 +190,6 @@ window.Quarto = {
 
 
 
-
 <section id="데이터-학습-방법" class="level2">
 <h2 class="anchored" data-anchor-id="데이터-학습-방법">1. 데이터 학습 방법</h2>
 <p><code>-</code> 데이터 학습 구조</p>
@@ -235,16 +200,16 @@ window.Quarto = {
 <li>변경값은 합성함수의 미분값을 연속으로 계산하는 규칙(chain rule)을 통해 정해짐.</li>
 <li>오차가 줄어드는 방향으로 조정되는데, 데이터에 대한 출력값과 실측값의 오류가 일정 수준 이하로 떨어질 때까지 반복.</li>
 </ol>
-<div class="img-fluid quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="PT5_files/figure-html/3a0dedc7-1317-43ef-8837-a556d69c03ab-1-b332cb31-8266-4891-803d-04d8b44dcfef.png" class="img-fluid figure-img"></p>
-<figcaption>image.png</figcaption>
+<figcaption class="figure-caption">image.png</figcaption>
 </figure>
 </div>
 </section>
 <section id="온도-예제로-간단한-모델-만들기" class="level2">
 <h2 class="anchored" data-anchor-id="온도-예제로-간단한-모델-만들기">2. 온도 예제로 간단한 모델 만들기</h2>
-<div id="90a9e842-7b69-45c6-89e8-6ba5bcc08ffc" class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
@@ -252,13 +217,13 @@ window.Quarto = {
 </div>
 <p><code>-</code> 1. 데이터 수집</p>
 <p>단위를 모르는 새로운 온도계와 단위를 알고 있는 온도계를 이용하여 새로운 온도계의 해석</p>
-<div id="e9acc200-375c-4a61-9d16-68d14c0fff23" class="cell" data-execution_count="27">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> [<span class="fl">0.5</span>,  <span class="fl">14.0</span>, <span class="fl">15.0</span>, <span class="fl">28.0</span>, <span class="fl">11.0</span>,  <span class="fl">8.0</span>,  <span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>,  <span class="fl">6.0</span>, <span class="fl">13.0</span>, <span class="fl">21.0</span>]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> [<span class="fl">35.7</span>, <span class="fl">55.9</span>, <span class="fl">58.2</span>, <span class="fl">81.9</span>, <span class="fl">56.3</span>, <span class="fl">48.9</span>, <span class="fl">33.9</span>, <span class="fl">21.8</span>, <span class="fl">48.4</span>, <span class="fl">60.4</span>, <span class="fl">68.4</span>]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> torch.tensor(t_c)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> torch.tensor(t_u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="be5ef6c9-b7aa-4389-be72-353458638ed5" class="cell" data-execution_count="28">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -268,19 +233,15 @@ window.Quarto = {
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.plot(t_u.numpy(), t_c.numpy(), <span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="PT5_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="PT5_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p><code>-</code> 2. 선형모델을 가정하여 파이토치로 해결</p>
-<div id="0a2f68f1-7f01-40db-b6fc-700b366fda14" class="cell" data-execution_count="29">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(t_u, w, b):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">*</span> t_u <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="35edd8ac-05a7-4e5e-a0a1-ee0955c250e7" class="cell" data-execution_count="30">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_fn(t_p, t_c):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    squared_diffs <span class="op">=</span> (t_p <span class="op">-</span> t_c)<span class="op">**</span><span class="dv">2</span> </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> squared_diffs.mean() <span class="co"># mean square loss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -289,66 +250,66 @@ window.Quarto = {
 <li><span class="math inline">\(y = |t_p - t_c|\)</span> : 우리가 수렴하고자 하는 경우에 미분값을 정의할 수 없음.</li>
 <li><span class="math inline">\(y = (t_p - t_c)^2\)</span> : 0으로 수렴하고자 할 때 더 빨리 수렴 가능.</li>
 </ul>
-<div id="4e8cb2d2-933f-4768-9433-abc8c02cb936" class="cell" data-execution_count="31">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> torch.ones(())</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> torch.zeros(())</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>t_p <span class="op">=</span> model(t_u, w, b)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>t_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>tensor([35.7000, 55.9000, 58.2000, 81.9000, 56.3000, 48.9000, 33.9000,
         21.8000, 48.4000, 60.4000, 68.4000])</code></pre>
 </div>
 </div>
-<div id="6b06e03b-5c1e-4688-a462-5ef864328938" class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss_fn(t_p, t_c)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>loss</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>tensor(1763.8848)</code></pre>
 </div>
 </div>
 <p><code>-</code> 3. 손실 줄이기 - 경사 하강법</p>
-<div class="img-fluid quarto-figure quarto-figure-center">
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="PT5_files/figure-html/d0c9852e-8578-4df1-8aa5-4a37a0b24086-1-0d19c5d4-0102-43bd-9e17-9b5e871ad5b6.png" class="img-fluid figure-img"></p>
-<figcaption>image.png</figcaption>
+<figcaption class="figure-caption">image.png</figcaption>
 </figure>
 </div>
+<p>The linear model assumption is given by $ M = w t_u + b = t_p $</p>
 <ul>
 <li>$ t_c $ : 섭씨 온도 값</li>
 <li>$ t_u $ : 모르는 단위</li>
 <li>$ t_p $ : 모델이 출력한 온도</li>
-<li>$ w , b $ : 가중치</li>
+<li>w , b : 가중치</li>
 <li>$ M = w * t_u + b = t_p $ : 선형 모델 가정</li>
 </ul>
-<div id="b60893a3-0fd8-465d-8af8-769c3b4333b5" class="cell" data-execution_count="33">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 선형 모델</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(t_u, w, b):</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">*</span> t_u <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="bfd2ed56-8974-44d3-9ff3-49b0e1d17fea" class="cell" data-execution_count="34">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> torch.ones(())</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> torch.zeros(())</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>t_p <span class="op">=</span> model(t_u, w, b)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>t_p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>tensor([35.7000, 55.9000, 58.2000, 81.9000, 56.3000, 48.9000, 33.9000,
         21.8000, 48.4000, 60.4000, 68.4000])</code></pre>
 </div>
 </div>
-<ul>
-<li>y = |t_p - t_c| : 우리가 수렴하고자 하는 경우에 미분값을 정의할 수 없음.</li>
-<li>y = (t_p - t_c)^2 : 0으로 수렴하고자 할 때 더 빨리 수렴 가능.</li>
-</ul>
-<p>$ M = w * t_u + b t_p$</p>
-<p>$ L = (t_p - t_c)^2 $</p>
-<p>$ _{w}L = {} = {} · {}$</p>
-<p>$ {} = 2(t_p - t_c)$ , $ {} = t_u$</p>
-<p>$ _{b}L = {} = {} · {}$</p>
-<p>$ {} = 2(t_p - t_c)$ , $ {} = 1$</p>
-<p>$ _{w,b} = ({} , {}) = ( {} · {} , {} · {} )$</p>
-<div id="55a0b601-eeb1-4d53-b489-1eef4c27e351" class="cell" data-execution_count="35">
+<p><span class="math display">\[y = \lvert t_p - t_c \lvert \]</span> 우리가 수렴하고자 하는 경우에 미분값을 정의할 수 없음. <span class="math display">\[y = (t_p - t_c)^2\]</span> 0으로 수렴하고자 할 때 더 빨리 수렴 가능.</p>
+<p><span class="math display">\[ M = w * t_u + b \approx t_p \]</span></p>
+<p><span class="math display">\[ L = (t_p - t_c)^2 \]</span></p>
+<p><span class="math display">\[ \nabla _{w}L = {\partial{L}\over\partial{w}} = {\partial{L}\over\partial{M}} · {\partial{M}\over\partial{w}}\]</span></p>
+<p><span class="math display">\[ {\partial{L}\over\partial{M}} = 2(t_p - t_c) \quad,\quad {\partial{M}\over\partial{w}} = t_u\]</span></p>
+<p><span class="math display">\[ \nabla _{b}L = {\partial{L}\over\partial{b}} = {\partial{L}\over\partial{M}} · {\partial{M}\over\partial{b}}\]</span></p>
+<p><span class="math display">\[ {\partial{L}\over\partial{M}} = 2(t_p - t_c) \quad,\quad {\partial{M}\over\partial{b}} = 1\]</span></p>
+<p><span class="math display">\[ \nabla _{w,b} \mathcal{L} = ({\partial{L}\over\partial{w}} , {\partial{L}\over\partial{b}})
+= ( {\partial{L}\over\partial{M}} · {\partial{M}\over\partial{w}}
+, {\partial{L}\over\partial{M}} · {\partial{M}\over\partial{b}} )\]</span></p>
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 손실 함수</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_fn(t_p, t_c):</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    squared_diffs <span class="op">=</span> (t_p <span class="op">-</span> t_c)<span class="op">**</span><span class="dv">2</span></span>
@@ -379,7 +340,7 @@ window.Quarto = {
 <ul>
 <li>epoch는 파라미터를 조정하는 훈련의 수</li>
 </ul>
-<div id="058422b0-a99d-4178-ae77-7376fce2d8e3" class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="37">
+<div class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>training_loop(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    n_epochs <span class="op">=</span> <span class="dv">100</span>, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    learning_rate <span class="op">=</span> <span class="fl">1e-2</span>, </span>
@@ -488,11 +449,11 @@ Epoch 98, Loss nan
 Epoch 99, Loss nan
 Epoch 100, Loss nan</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>tensor([nan, nan])</code></pre>
 </div>
 </div>
-<div id="29e5b875-e9ef-4afa-8c15-565893a007c2" class="cell" data-execution_count="36">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode python code-annotation-code code-with-copy"><code class="sourceCode python"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> training_loop(n_epochs, learning_rate, params, t_u, t_c):</span>
 <span id="annotated-cell-11-2"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n_epochs <span class="op">+</span> <span class="dv">1</span>):</span>
 <span id="annotated-cell-11-3"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>        w, b <span class="op">=</span> params</span>
@@ -513,7 +474,7 @@ Epoch 100, Loss nan</code></pre>
 <li>원하는것은 조금씩 점차적으로 params 조정하는 것</li>
 <li>해답은 learning rate을 작게하면 된다.</li>
 </ul>
-<div id="4942ebea-ed10-420b-bd47-7e8388a05d40" class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="38">
+<div class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>training_loop(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    n_epochs <span class="op">=</span> <span class="dv">100</span>, </span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    learning_rate <span class="op">=</span> <span class="fl">1e-4</span>, </span>
@@ -622,7 +583,7 @@ Epoch 98, Loss 29.024492
 Epoch 99, Loss 29.023582
 Epoch 100, Loss 29.022667</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>tensor([ 0.2327, -0.0438])</code></pre>
 </div>
 </div>
@@ -631,10 +592,10 @@ Epoch 100, Loss 29.022667</code></pre>
 <li>입력 정규화가 필요</li>
 <li>여기 예제에서는 입력값의 범위를 -1에서 1 사이로 조절,즉 <span class="math inline">\(t_u\)</span> 에 0.1를 곱하면 해결된다.</li>
 </ul>
-<div id="d6fb89d4-528a-4b1f-971a-0d277bc1fd9d" class="cell" data-execution_count="39">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>t_un <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> t_u</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="59853a57-604d-451f-b869-befcb5c64264" class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="40">
+<div class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="16">
 <div class="sourceCode cell-code" id="annotated-cell-15"><pre class="sourceCode python code-annotation-code code-with-copy"><code class="sourceCode python"><span id="annotated-cell-15-1"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a>training_loop(</span>
 <span id="annotated-cell-15-2"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a>    n_epochs <span class="op">=</span> <span class="dv">100</span>, </span>
 <span id="annotated-cell-15-3"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a>    learning_rate <span class="op">=</span> <span class="fl">1e-2</span>, </span>
@@ -743,12 +704,12 @@ Epoch 98, Loss 22.279875
 Epoch 99, Loss 22.214186
 Epoch 100, Loss 22.148710</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>tensor([ 2.7553, -2.5162])</code></pre>
 </div>
 </div>
 <p><code>-</code> 정확한 학습을 위해 epoch를 올려본다</p>
-<div id="4330b543-f057-4ed4-bc22-bf23f039933d" class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="48">
+<div class="cell" data-scrolled="true" style="max-height: 300px; overflow-y: auto;" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> training_loop(</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    n_epochs <span class="op">=</span> <span class="dv">5000</span>, </span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    learning_rate <span class="op">=</span> <span class="fl">1e-2</span>, </span>
@@ -5759,7 +5720,7 @@ Epoch 4998, Loss 2.927647
 Epoch 4999, Loss 2.927647
 Epoch 5000, Loss 2.927648</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="48">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>tensor([  5.3671, -17.3012])</code></pre>
 </div>
 </div>
@@ -5767,67 +5728,57 @@ Epoch 5000, Loss 2.927648</code></pre>
 <li>즉 이건 섭씨 온도계를 화씨 온도계로 변화하는 것이다</li>
 <li>정확 w=5.5556 b=17.778</li>
 </ul>
-<div id="a5e25b8e-9707-4570-a4fb-1b0bc2e8aca5" class="cell" data-execution_count="51">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="51">
-<pre><code>tensor([  5.3671, -17.3012])</code></pre>
-</div>
-</div>
-<div id="fa962e31-01a3-4f71-b2e9-e317a7ee755a" class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="annotated-cell-18"><pre class="sourceCode python code-annotation-code code-with-copy"><code class="sourceCode python"><span id="annotated-cell-18-1"><a href="#annotated-cell-18-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
-<span id="annotated-cell-18-2"><a href="#annotated-cell-18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="annotated-cell-18-3"><a href="#annotated-cell-18-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-18-4"><a href="#annotated-cell-18-4" aria-hidden="true" tabindex="-1"></a>t_p <span class="op">=</span> model(t_un, <span class="op">*</span>params)</span>
-<span id="annotated-cell-18-5"><a href="#annotated-cell-18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-18-6"><a href="#annotated-cell-18-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(dpi<span class="op">=</span><span class="dv">100</span>)</span>
-<span id="annotated-cell-18-7"><a href="#annotated-cell-18-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Temperature (°Fahrenheit)"</span>)</span>
-<span id="annotated-cell-18-8"><a href="#annotated-cell-18-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Temperature (°Celsius)"</span>)</span>
-<span id="annotated-cell-18-9"><a href="#annotated-cell-18-9" aria-hidden="true" tabindex="-1"></a>plt.plot(t_u.numpy(), t_p.detach().numpy())</span>
-<span id="annotated-cell-18-10"><a href="#annotated-cell-18-10" aria-hidden="true" tabindex="-1"></a>plt.plot(t_u.numpy(), t_c.numpy(), <span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-scrolled="true" data-execution_count="18">
+<div class="sourceCode cell-code" id="annotated-cell-17"><pre class="sourceCode python code-annotation-code code-with-copy"><code class="sourceCode python"><span id="annotated-cell-17-1"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="annotated-cell-17-2"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="annotated-cell-17-3"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-17-4"><a href="#annotated-cell-17-4" aria-hidden="true" tabindex="-1"></a>t_p <span class="op">=</span> model(t_un, <span class="op">*</span>params)</span>
+<span id="annotated-cell-17-5"><a href="#annotated-cell-17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-17-6"><a href="#annotated-cell-17-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(dpi<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="annotated-cell-17-7"><a href="#annotated-cell-17-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Temperature (°Fahrenheit)"</span>)</span>
+<span id="annotated-cell-17-8"><a href="#annotated-cell-17-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Temperature (°Celsius)"</span>)</span>
+<span id="annotated-cell-17-9"><a href="#annotated-cell-17-9" aria-hidden="true" tabindex="-1"></a>plt.plot(t_u.numpy(), t_p.detach().numpy())</span>
+<span id="annotated-cell-17-10"><a href="#annotated-cell-17-10" aria-hidden="true" tabindex="-1"></a>plt.plot(t_u.numpy(), t_c.numpy(), <span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="PT5_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
+<p><img src="PT5_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="기울기-자동-계산" class="level2">
 <h2 class="anchored" data-anchor-id="기울기-자동-계산">3. 기울기 자동 계산</h2>
-<div id="a45e5917-38ff-4150-b833-54dcb6ef5c32" class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> torch.tensor([<span class="fl">0.5</span>, <span class="fl">14.0</span>, <span class="fl">15.0</span>, <span class="fl">28.0</span>, <span class="fl">11.0</span>, <span class="fl">8.0</span>,</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>, <span class="fl">6.0</span>, <span class="fl">13.0</span>, <span class="fl">21.0</span>])</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> torch.tensor([<span class="fl">35.7</span>, <span class="fl">55.9</span>, <span class="fl">58.2</span>, <span class="fl">81.9</span>, <span class="fl">56.3</span>, <span class="fl">48.9</span>,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">33.9</span>, <span class="fl">21.8</span>, <span class="fl">48.4</span>, <span class="fl">60.4</span>, <span class="fl">68.4</span>])</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>t_un <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> t_u</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>t_c <span class="op">=</span> torch.tensor([<span class="fl">0.5</span>, <span class="fl">14.0</span>, <span class="fl">15.0</span>, <span class="fl">28.0</span>, <span class="fl">11.0</span>, <span class="fl">8.0</span>,</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">3.0</span>, <span class="op">-</span><span class="fl">4.0</span>, <span class="fl">6.0</span>, <span class="fl">13.0</span>, <span class="fl">21.0</span>])</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>t_u <span class="op">=</span> torch.tensor([<span class="fl">35.7</span>, <span class="fl">55.9</span>, <span class="fl">58.2</span>, <span class="fl">81.9</span>, <span class="fl">56.3</span>, <span class="fl">48.9</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">33.9</span>, <span class="fl">21.8</span>, <span class="fl">48.4</span>, <span class="fl">60.4</span>, <span class="fl">68.4</span>])</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>t_un <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> t_u</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f6601167-a0f1-4131-b940-1d4fed372763" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(t_u, w, b):</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">*</span> t_u <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(t_u, w, b):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w <span class="op">*</span> t_u <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="69c6a1c1-518c-483a-8fd4-b1fb9bcb9617" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_fn(t_p, t_c):</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    squared_diffs <span class="op">=</span> (t_p <span class="op">-</span> t_c)<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> squared_diffs.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loss_fn(t_p, t_c):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    squared_diffs <span class="op">=</span> (t_p <span class="op">-</span> t_c)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> squared_diffs.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="0e745d92-06f7-45d8-8fe9-4e1837da2af5" class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 파라미터 초기화</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> torch.tensor([<span class="fl">1.0</span>, <span class="fl">0.0</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 파라미터 초기화</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> torch.tensor([<span class="fl">1.0</span>, <span class="fl">0.0</span>], requires_grad<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ec9b242d-bb6c-453a-a464-e0c5af812024" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 모든 파이토치 텐서는 grad 속성을 가진다</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>params.grad <span class="kw">is</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 모든 파이토치 텐서는 grad 속성을 가진다</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>params.grad <span class="kw">is</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div id="626059e8-9232-45a3-a397-1f978d5ec83d" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 기울기 자동 미분</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss_fn(model(t_u, <span class="op">*</span>params), t_c)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>params.grad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 기울기 자동 미분</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss_fn(model(t_u, <span class="op">*</span>params), t_c)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>params.grad</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>tensor([4517.2969,   82.6000])</code></pre>
 </div>
@@ -5917,9 +5868,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -5929,17 +5881,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -5952,120 +5895,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -6109,7 +5938,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -6135,32 +5963,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -6221,7 +6023,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
